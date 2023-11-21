@@ -73,32 +73,47 @@ cd ..
 
 Note that I have downloaded some models already in `/home/shared/checkpoints`, so check there first before running the next command:
 ```
-python lit-gpt/scripts/download.py --repo_id tiiuae/falcon-7b
+python lit-gpt/scripts/download.py \
+    --repo_id tiiuae/falcon-7b
 ```
 You can use the pre-downloaded version instead here (or modify to point to your downloaded version) as the following command loads the model into CPU RAM:
 ```
-python lit-gpt/scripts/convert_hf_checkpoint.py --checkpoint_dir /home/checkpoints/tiiuae/falcon-7b
+python lit-gpt/scripts/convert_hf_checkpoint.py \
+    --checkpoint_dir /home/checkpoints/tiiuae/falcon-7b
 ```
 Check that the model works (will utilize GPU if available - about 15G for falcon so inference, but not training, on A5000 is possible):
 ```
-python lit-gpt/generate/base.py --checkpoint_dir /home/checkpoints/tiiuae/falcon-7b --prompt "Tell me an interesting fun fact about earth:"
+python lit-gpt/generate/base.py \
+    --checkpoint_dir /home/checkpoints/tiiuae/falcon-7b \
+    --prompt "Tell me an interesting fun fact about earth:"
 ```
 
 ## Download/Prep Data
 A small data set (won't be very good, but can be good to quickly check the pipeline).
 ```
-python lit-gpt/scripts/prepare_dolly.py --checkpoint_dir /home/checkpoints/tiiuae/falcon-7b
+python lit-gpt/scripts/prepare_dolly.py \
+    --checkpoint_dir /home/checkpoints/tiiuae/falcon-7b
 ```
 
 ## Fine-tune the LLM
 Currently only runs on the A100: ~65G GPU RAM. There will be an issue at this stage where the `generate_prompt()` function cannot be imported due to version skew and interactions with the `lm-eval` package. You might get away with it for now, but once you install the `lm-eval` package for the evaluation step below, it will show up again. Best squash the bug now. You can open `lit-gpt/finetune/lora.py` and comment out the offending line (`from scripts.prepare_alpaca import generate_prompt`), then copy-paste the function from `lit-gpt/scripts/prepare_alpaca.py` directly below the commented line. (I'll work on performing these steps with the latest `lit-gpt` instead soon.)
 
 ```
-python lit-gpt/finetune/lora.py --data_dir data/dolly --checkpoint_dir /home/checkpoints/tiiuae/falcon-7b --precision bf16-true --out_dir out/lora/falcon-7b --quantize "bnb.nf4"
+python lit-gpt/finetune/lora.py \
+    --data_dir data/dolly
+    --checkpoint_dir /home/checkpoints/tiiuae/falcon-7b
+    --precision bf16-true
+    --out_dir out/lora/falcon-7b
+    --quantize "bnb.nf4"
 ```
-Double quantization - a little less memory, but probably not worth it.
+Double quantization - a little less memory, and probably not worth it, but this is how it's done.
 ```
-python lit-gpt/finetune/lora.py --data_dir data/dolly --checkpoint_dir /home/checkpoints/tiiuae/falcon-7b --precision bf16-true --out_dir out/lora/falcon-7b --quantize "bnb.nf4-dq"
+python lit-gpt/finetune/lora.py \
+    --data_dir data/dolly \
+    --checkpoint_dir /home/checkpoints/tiiuae/falcon-7b \
+    --precision bf16-true \
+    --out_dir out/lora/falcon-7b \
+    --quantize "bnb.nf4-dq"
 ```
 
 ## Model Evaluation
@@ -114,16 +129,27 @@ cd ..
 Check the evaluation on the original model.
 
 ```
-python lit-gpt/eval/lm_eval_harness.py --checkpoint_dir /home/checkpoints/tiiuae/falcon-7b-instruct --precision "bf16-true" --eval_tasks "[truthfulqa_mc, wikitext, openbookqa, arithmetic_1dc]" --batch_size 4 --save_filepath "results-falcon-7b-instruct.json"
+python lit-gpt/eval/lm_eval_harness.py \
+    --checkpoint_dir /home/checkpoints/tiiuae/falcon-7b \
+    --precision "bf16-true" \
+    --eval_tasks "[truthfulqa_mc, wikitext, openbookqa, arithmetic_1dc]" \
+    --batch_size 4 \
+    --save_filepath results-falcon-7b.json
 ```
 
 Now for the fine-tuned model. Need to first merge the weights when using lora for finetuning as [explained here](https://github.com/Lightning-AI/lit-gpt/blob/6178c7cc58ba82e5cce138e7a3159c384e2d3b0f/tutorials/finetune_lora.md). Then we can basically proceed in a similar manner as the original model.
 ```
 python scripts/merge_lora.py \
-  --checkpoint_dir "checkpoints/stabilityai/stablelm-base-alpha-3b/" \
-  --lora_path "out/lora_weights/stablelm-base-alpha-3b/lit_model_lora_finetuned.pth" \
-  --out_dir "out/lora_merged/stablelm-base-alpha-3b/"
+  --checkpoint_dir /home/checkpoints/tiiuae/falcon-7b \
+  --lora_path out/lora/falcon-7b/lit_model_lora_finetuned.pth" \
+  --out_dir out/lora_merged/falcon-7b
 ```
+and the final evaluation step:
 ```
-python lit-gpt/eval/lm_eval_harness_lora.py --lora_path out/lora/falcon-7b-instruct/lit_model_lora_finetuned.pth --checkpoint_dir /home/checkpoints/tiiuae/falcon-7b-instruct --precision "bf16-true" --eval_tasks "[truthfulqa_mc, wikitext, openbookqa, arithmetic_1dc]" --batch_size 4 --save_filepath "results-falcon-7b-ft.json"
+python lit-gpt/eval/lm_eval_harness.py \
+    --checkpoint_dir out/lora_merged/falcon-7b \
+    --precision "bf16-true" \
+    --eval_tasks "[truthfulqa_mc, wikitext, openbookqa, arithmetic_1dc]" \
+    --batch_size 4 \
+    --save_filepath results-falcon-7b-finetuned.json
 ```
