@@ -137,7 +137,7 @@ python lit-gpt/eval/lm_eval_harness.py \
     --save_filepath results-falcon-7b.json
 ```
 
-Now for the fine-tuned model. Need to first merge the weights when using lora for finetuning as [explained here](https://github.com/Lightning-AI/lit-gpt/blob/6178c7cc58ba82e5cce138e7a3159c384e2d3b0f/tutorials/finetune_lora.md). Then we can basically proceed in a similar manner as the original model.
+Now for the fine-tuned model. Need to first merge the weights when using lora for finetuning as [explained here](https://github.com/Lightning-AI/lit-gpt/blob/6178c7cc58ba82e5cce138e7a3159c384e2d3b0f/tutorials/finetune_lora.md). Then we can basically proceed in a similar manner as the original model, but be sure to check over the link and see if there is anything specific to your model that needs to be done. (For example, Llama 2 also needs a manual copy step for it's `tokenizer.model` file to complete the merge.)
 ```
 python scripts/merge_lora.py \
   --checkpoint_dir /home/checkpoints/tiiuae/falcon-7b \
