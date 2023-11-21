@@ -12,7 +12,7 @@ You will need to have a working stack with PyTorch >= 2.1 since we will be utili
 I've built a custom stack which is available on Babbage/Hamilton and compatible with [`apptainer`](https://apptainer.org/):
 `/home/shared/sif/csci-2023-10-20.sif`
 
-The above stack is quite large since they utiilize so many purposes at MTSU, but if you wanted to build the image using Docker, the [stack repo for this specific version is here](https://github.com/Phillips-Lab-MTSU/CSCI-MTSU-JupyterHub/tree/24a76ca55d4c289359c2a84cf6eaf8b0140e21cf). Once you build the image using Docker, you can use apptainer to convert is to a `sif` and upload to wherever you would like. However, a publicly pullable version is provided [here in the cloud]().
+The above stack is quite large since they utiilize so many purposes at MTSU, but if you wanted to build the image using Docker, the [stack repo for this specific version is here](https://github.com/Phillips-Lab-MTSU/CSCI-MTSU-JupyterHub/tree/24a76ca55d4c289359c2a84cf6eaf8b0140e21cf). Once you build the image using Docker, you can use apptainer to convert is to a `sif` and upload to wherever you would like. However, a publicly pullable version is provided [here in the cloud](https://data.phillips-lab.org/sif/csci-2023-10-20.sif).
 
 I recommend logging into our JupyterHub using [azuread](https://jupyterhub.cs.mtsu.edu/azuread/) then log into Babbage using a terminal and start a JupyterLab session using the stack above. I utilize `tmux` and the following command to start my job to get an A5000 on Babbage:
 ```
