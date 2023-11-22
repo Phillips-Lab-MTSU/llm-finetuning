@@ -139,10 +139,16 @@ python lit-gpt/eval/lm_eval_harness.py \
 
 Now for the fine-tuned model. Need to first merge the weights when using lora for finetuning as [explained here](https://github.com/Lightning-AI/lit-gpt/blob/6178c7cc58ba82e5cce138e7a3159c384e2d3b0f/tutorials/finetune_lora.md). Then we can basically proceed in a similar manner as the original model, but be sure to check over the link and see if there is anything specific to your model that needs to be done. (For example, Llama 2 also needs a manual copy step for it's `tokenizer.model` file to complete the merge.)
 ```
-python scripts/merge_lora.py \
+mkdir -p out/lora_merged/falcon-7b
+python lit-gpt/scripts/merge_lora.py \
   --checkpoint_dir /home/checkpoints/tiiuae/falcon-7b \
-  --lora_path out/lora/falcon-7b/lit_model_lora_finetuned.pth" \
+  --lora_path out/lora/falcon-7b/lit_model_lora_finetuned.pth \
   --out_dir out/lora_merged/falcon-7b
+cp \
+    /home/checkpoints/tiiuae/falcon-7b/lit_config.json \
+    /home/checkpoints/tiiuae/falcon-7b/tokenizer_config.json \
+    /home/checkpoints/tiiuae/falcon-7b/tokenizer.json \
+    out/lora_merged/falcon-7b/.
 ```
 and the final evaluation step:
 ```
@@ -153,3 +159,131 @@ python lit-gpt/eval/lm_eval_harness.py \
     --batch_size 4 \
     --save_filepath results-falcon-7b-finetuned.json
 ```
+## Results for Falcon-7B Fine-tuned on Dolly15k
+
+I've highlighted the better scores between the two, but most of them are statistically indistinguishable.
+
+<table border="1">
+  <tr>
+    <th>Falcon-7B</th>
+    <th>Falcon-7B Fine-tuned</th>
+  </tr>
+  <tr>
+    <td>
+      <!-- Data Set 2 (Left Column) -->
+      <ul>
+        <li>results
+          <ul>
+            <li>arithmetic_1dc
+              <ul>
+                <li>acc: 0.078</li>
+                <li>acc_stderr: 0.005997998665721462</li>
+              </ul>
+            </li>
+            <li>openbookqa
+              <ul>
+                <li>acc: 0.308</li>
+                <li>acc_stderr: 0.020667032987466104</li>
+                <li>acc_norm: 0.44</li>
+                <li>acc_norm_stderr: 0.02222133153414306</li>
+              </ul>
+            </li>
+            <li>truthfulqa_mc
+              <ul>
+                <li>mc1: <b>0.22399020807833536</b></li>
+                <li>mc1_stderr: 0.014594964329474202</li>
+                <li>mc2: <b>0.3427171458710919</b></li>
+                <li>mc2_stderr: 0.013275237850618151</li>
+              </ul>
+            </li>
+            <li>wikitext
+              <ul>
+                <li>word_perplexity: 24.415932261609193</li>
+                <li>byte_perplexity: 1.8176147813059769</li>
+                <li>bits_per_byte: 0.8620464723661706</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li>versions
+          <ul>
+            <li>arithmetic_1dc: 0</li>
+            <li>openbookqa: 0</li>
+            <li>truthfulqa_mc: 1</li>
+            <li>wikitext: 1</li>
+          </ul>
+        </li>
+        <li>config
+          <ul>
+            <li>model: falcon-7b</li>
+            <li>num_fewshot: 0</li>
+            <li>batch_size: 4</li>
+            <li>device: cuda:0</li>
+            <li>no_cache: true</li>
+            <li>limit: null</li>
+            <li>bootstrap_iters: 2</li>
+            <li>description_dict: null</li>
+          </ul>
+        </li>
+      </ul>
+    </td>
+    <td>
+      <!-- Data Set 1 (Right Column) -->
+      <ul>
+        <li>results
+          <ul>
+            <li>arithmetic_1dc
+              <ul>
+                <li>acc: <b>0.1065</b></li>
+                <li>acc_stderr: 0.006899469279456961</li>
+              </ul>
+            </li>
+            <li>openbookqa
+              <ul>
+                <li>acc: <b>0.328</b></li>
+                <li>acc_stderr: 0.021017027165175492</li>
+                <li>acc_norm: <b>0.442</b></li>
+                <li>acc_norm_stderr: 0.02223197069632112</li>
+              </ul>
+            </li>
+            <li>truthfulqa_mc
+              <ul>
+                <li>mc1: 0.22031823745410037</li>
+                <li>mc1_stderr: 0.014509045171487288</li>
+                <li>mc2: 0.3352778427157243</li>
+                <li>mc2_stderr: 0.013536797678601513</li>
+              </ul>
+            </li>
+            <li>wikitext
+              <ul>
+                <li>word_perplexity: <b>14.566155406059085</b></li>
+                <li>byte_perplexity: <b>1.6502559940445065</b></li>
+                <li>bits_per_byte: <b>0.7226898382236691</b></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li>versions
+          <ul>
+            <li>arithmetic_1dc: 0</li>
+            <li>openbookqa: 0</li>
+            <li>truthfulqa_mc: 1</li>
+            <li>wikitext: 1</li>
+          </ul>
+        </li>
+        <li>config
+          <ul>
+            <li>model: falcon-7b</li>
+            <li>num_fewshot: 0</li>
+            <li>batch_size: 4</li>
+            <li>device: cuda:0</li>
+            <li>no_cache: true</li>
+            <li>limit: null</li>
+            <li>bootstrap_iters: 2</li>
+            <li>description_dict: null</li>
+          </ul>
+        </li>
+      </ul>
+    </td>
+  </tr>
+</table>
