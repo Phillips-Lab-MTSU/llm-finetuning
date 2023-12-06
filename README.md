@@ -100,10 +100,10 @@ Currently only runs on the A100: ~65G GPU RAM. There will be an issue at this st
 
 ```
 python lit-gpt/finetune/lora.py \
-    --data_dir data/dolly
-    --checkpoint_dir /home/checkpoints/tiiuae/falcon-7b
-    --precision bf16-true
-    --out_dir out/lora/falcon-7b
+    --data_dir data/dolly \
+    --checkpoint_dir /home/checkpoints/tiiuae/falcon-7b \
+    --precision bf16-true \
+    --out_dir out/lora/falcon-7b \
     --quantize "bnb.nf4"
 ```
 Double quantization - a little less memory, and probably not worth it, but this is how it's done.
