@@ -59,9 +59,16 @@ Once the job is in the queue and started up, I check which node I have been allo
 You will need to customize the environment a little:
 ```
 pip install --user jsonargparse[signatures] sentencepiece bitsandbytes==0.41.0
+```
+
+#### Important: `flash-attn` is package for speeding up transformer architectures, but comes at a cost of requiring A100/H00-level hardware on most of my current testing.
+
+While this might change in the future, **certain 1B models that normally fit on a 24GB GPU simply will not train with flash-attn installed**. I recommend making a choice based on available hardware: if you have an A100/H100, then you can install it for speed-up, but if you **don't** have an A100/H100, then you should **not** install it to allow for these transformer models to train on smaller-memory hardware.
+```
 MAX_JOBS=8 pip install --user flash-attn --no-build-isolation
 ```
-Prep `lit-gpt` by pulling a version compatible with flash-attn 2. Note that the newest version of `lit-gpt` dropped the flash-attn dependency, but then requires PyTorch 2.2. I will update this step when 2.2 rolls from nightly into stable, but I don't feel comfortable putting students/faculty on a non-stable platform. For now, use this for documentation then: [browse repo at commit below](https://github.com/Lightning-AI/lit-gpt/tree/6178c7cc58ba82e5cce138e7a3159c384e2d3b0f)
+
+Prep `lit-gpt` by pulling a version compatible with flash-attn 2. Note that the newest version of `lit-gpt` dropped the flash-attn dependency, but then requires PyTorch 2.2. It's important to note that `flash-attn` is used by PyTorch 2.2 if it is installed. I will update this step when 2.2 rolls from nightly into stable, but I don't feel comfortable putting students/faculty on a non-stable platform. For now, use this for documentation then: [browse repo at commit below](https://github.com/Lightning-AI/lit-gpt/tree/6178c7cc58ba82e5cce138e7a3159c384e2d3b0f)
 ```
 git clone https://github.com/Lightning-AI/lit-gpt.git
 cd lit-gpt
