@@ -78,17 +78,17 @@ cd ..
 
 ## Download/Prep Model
 
-Note that I have downloaded some models already in `/home/shared/checkpoints`, so check there first before running the next command:
+Note that I have downloaded some models already in `/home/shared/checkpoints`, so check there first before running the next commands. In particular, you will have to select which model you would like and use the appropriate checkpoint directory that you download for all subsequent commands. Take a look at the github repo for `lit-gpt` for [options](https://github.com/Lightning-AI/lit-gpt), then continue on...
+
+This will downlad the model from hugging face and then convert it from hugging face checkpoint format to PyTorch lightning checkpoint format:
 ```
 python lit-gpt/scripts/download.py \
     --repo_id tiiuae/falcon-7b
-```
-You can use the pre-downloaded version instead here (or modify to point to your downloaded version) as the following command loads the model into CPU RAM:
-```
 python lit-gpt/scripts/convert_hf_checkpoint.py \
-    --checkpoint_dir /home/checkpoints/tiiuae/falcon-7b
+    --checkpoint_dir checkpoints/tiiuae/falcon-7b
 ```
-Check that the model works (will utilize GPU if available - about 15G for falcon so inference, but not training, on A5000 is possible):
+
+You can use the pre-downloaded version instead (or modify to point to your downloaded version). Note that I will be using the pre-downloaded path from this point forward, so you may need to make alterations (like removing the `/home/` prefix). Check that the model works (will utilize GPU if available - about 15G for falcon so inference, but not training, on A5000 is possible):
 ```
 python lit-gpt/generate/base.py \
     --checkpoint_dir /home/checkpoints/tiiuae/falcon-7b \
