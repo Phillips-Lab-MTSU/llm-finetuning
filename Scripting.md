@@ -227,7 +227,7 @@ If you open up the patched `lit-gpt/finetune/lora.py` script in your editor, you
 
 So, to initiate multi-GPU finetuning then for this larger model, we can use:
 ```
-sbatch --nnodes=2 --gpus=2 llm-run.sh \
+sbatch --nodes=2 --gpus=2 llm-run.sh \
     python lit-gpt/finetune/lora.py \
         --data_dir /home/shared/llm/data/EleutherAI/pythia-410m/dolly \
         --checkpoint_dir /home/shared/llm/checkpoints/EleutherAI/pythia-410m \
