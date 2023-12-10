@@ -207,7 +207,7 @@ cp \
     /home/shared/llm/checkpoints/EleutherAI/pythia-160m/lit_config.json \
     /home/shared/llm/checkpoints/EleutherAI/pythia-160m/tokenizer_config.json \
     /home/shared/llm/checkpoints/EleutherAI/pythia-160m/tokenizer.json \
-    out/lora_merged/pythia-160m/.
+    out/lora_merged/pythia-160m-finetuned/.
 ```
 and the final evaluation step as so:
 ```
@@ -238,129 +238,128 @@ You will still need to merge the weights and copy other auxiliary files for this
 
 ## Results for Pythia-160m finetuned on Dolly15k
 
-I've highlighted the better scores between the two, but most of them are statistically indistinguishable.
+Most of the results are statistically indistinguishable, but here they are:
 
-<table border="1">
+<table border='1'>
   <tr>
-    <th>Falcon-7B</th>
-    <th>Falcon-7B Fine-tuned</th>
+    <th>Pythia-160m</th>
+    <th>Pythia-160m Fine-tuned</th>
   </tr>
   <tr>
     <td>
-      <!-- Data Set 2 (Left Column) -->
       <ul>
-        <li>results
-          <ul>
-            <li>arithmetic_1dc
+	<li>results
+	  <ul>
+	    <li>arithmetic_1dc
               <ul>
-                <li>acc: 0.078</li>
-                <li>acc_stderr: 0.005997998665721462</li>
+		<li>acc: 0.0</li>
+		<li>acc_stderr: 0.0</li>
               </ul>
-            </li>
-            <li>openbookqa
+	    </li>
+	    <li>openbookqa
               <ul>
-                <li>acc: 0.308</li>
-                <li>acc_stderr: 0.020667032987466104</li>
-                <li>acc_norm: 0.44</li>
-                <li>acc_norm_stderr: 0.02222133153414306</li>
+		<li>acc: 0.162</li>
+		<li>acc_stderr: 0.016494123566423515</li>
+		<li>acc_norm: 0.27</li>
+		<li>acc_norm_stderr: 0.019874354831287487</li>
               </ul>
-            </li>
-            <li>truthfulqa_mc
+	    </li>
+	    <li>truthfulqa_mc
               <ul>
-                <li>mc1: <b>0.22399020807833536</b></li>
-                <li>mc1_stderr: 0.014594964329474202</li>
-                <li>mc2: <b>0.3427171458710919</b></li>
-                <li>mc2_stderr: 0.013275237850618151</li>
+		<li>mc1: 0.24357405140758873</li>
+		<li>mc1_stderr: 0.015026354824910782</li>
+		<li>mc2: 0.445983277407095</li>
+		<li>mc2_stderr: 0.014990213240210378</li>
               </ul>
-            </li>
-            <li>wikitext
+	    </li>
+	    <li>wikitext
               <ul>
-                <li>word_perplexity: 24.415932261609193</li>
-                <li>byte_perplexity: 1.8176147813059769</li>
-                <li>bits_per_byte: 0.8620464723661706</li>
+		<li>word_perplexity: 33.44272972136349</li>
+		<li>byte_perplexity: 1.9277559001908169</li>
+		<li>bits_per_byte: 0.9469223835807006</li>
               </ul>
-            </li>
-          </ul>
-        </li>
-        <li>versions
-          <ul>
-            <li>arithmetic_1dc: 0</li>
-            <li>openbookqa: 0</li>
-            <li>truthfulqa_mc: 1</li>
-            <li>wikitext: 1</li>
-          </ul>
-        </li>
-        <li>config
-          <ul>
-            <li>model: falcon-7b</li>
-            <li>num_fewshot: 0</li>
-            <li>batch_size: 4</li>
-            <li>device: cuda:0</li>
-            <li>no_cache: true</li>
-            <li>limit: null</li>
-            <li>bootstrap_iters: 2</li>
-            <li>description_dict: null</li>
-          </ul>
-        </li>
+	    </li>
+	  </ul>
+	</li>
+	<li>versions
+	  <ul>
+	    <li>arithmetic_1dc: 0</li>
+	    <li>openbookqa: 0</li>
+	    <li>truthfulqa_mc: 1</li>
+	    <li>wikitext: 1</li>
+	  </ul>
+	</li>
+	<li>config
+	  <ul>
+	    <li>model: pythia-160m</li>
+	    <li>num_fewshot: 0</li>
+	    <li>batch_size: 4</li>
+	    <li>device: cuda:0</li>
+	    <li>no_cache: True</li>
+	    <li>limit: None</li>
+	    <li>bootstrap_iters: 2</li>
+	    <li>description_dict: None</li>
+	  </ul>
+	</li>
       </ul>
     </td>
     <td>
-      <!-- Data Set 1 (Right Column) -->
       <ul>
-        <li>results
-          <ul>
-            <li>arithmetic_1dc
+	<li>results
+	  <ul>
+	    <li>arithmetic_1dc
               <ul>
-                <li>acc: <b>0.1065</b></li>
-                <li>acc_stderr: 0.006899469279456961</li>
+		<li>acc: 0.0025</li>
+		<li>acc_stderr: 0.0011169148353275293</li>
               </ul>
-            </li>
-            <li>openbookqa
+	    </li>
+	    <li>openbookqa
               <ul>
-                <li>acc: <b>0.328</b></li>
-                <li>acc_stderr: 0.021017027165175492</li>
-                <li>acc_norm: <b>0.442</b></li>
-                <li>acc_norm_stderr: 0.02223197069632112</li>
+		<li>acc: 0.158</li>
+		<li>acc_stderr: 0.016328049804579824</li>
+		<li>acc_norm: 0.262</li>
+		<li>acc_norm_stderr: 0.019684688820194716</li>
               </ul>
-            </li>
-            <li>truthfulqa_mc
+	    </li>
+	    <li>truthfulqa_mc
               <ul>
-                <li>mc1: 0.22031823745410037</li>
-                <li>mc1_stderr: 0.014509045171487288</li>
-                <li>mc2: 0.3352778427157243</li>
-                <li>mc2_stderr: 0.013536797678601513</li>
+		<li>mc1: 0.2460220318237454</li>
+		<li>mc1_stderr: 0.015077219200662587</li>
+		<li>mc2: 0.4328092115863148</li>
+		<li>mc2_stderr: 0.01493920534206659</li>
               </ul>
-            </li>
-            <li>wikitext
+	    </li>
+	    <li>wikitext
               <ul>
-                <li>word_perplexity: <b>14.566155406059085</b></li>
-                <li>byte_perplexity: <b>1.6502559940445065</b></li>
-                <li>bits_per_byte: <b>0.7226898382236691</b></li>
+		<li>word_perplexity: 33.43316373893594</li>
+		<li>byte_perplexity: 1.9276527705228013</li>
+		<li>bits_per_byte: 0.9468452012774183</li>
               </ul>
-            </li>
-          </ul>
-        </li>
-        <li>versions
-          <ul>
-            <li>arithmetic_1dc: 0</li>
-            <li>openbookqa: 0</li>
-            <li>truthfulqa_mc: 1</li>
-            <li>wikitext: 1</li>
-          </ul>
-        </li>
-        <li>config
-          <ul>
-            <li>model: falcon-7b</li>
-            <li>num_fewshot: 0</li>
-            <li>batch_size: 4</li>
-            <li>device: cuda:0</li>
-            <li>no_cache: true</li>
-            <li>limit: null</li>
-            <li>bootstrap_iters: 2</li>
-            <li>description_dict: null</li>
-          </ul>
-        </li>
+	    </li>
+	  </ul>
+	</li>
+	<li>versions
+	  <ul>
+	    <li>arithmetic_1dc: 0</li>
+	    <li>openbookqa: 0</li>
+	    <li>truthfulqa_mc: 1</li>
+	    <li>wikitext: 1</li>
+	  </ul>
+	</li>
+	<li>config
+	  <ul>
+	    <li>model: pythia-160m</li>
+	    <li>num_fewshot: 0</li>
+	    <li>batch_size: 4</li>
+	    <li>device: cuda:0</li>
+	    <li>no_cache: True</li>
+	    <li>limit: None</li>
+	    <li>bootstrap_iters: 2</li>
+	    <li>description_dict: None</li>
+	  </ul>
+	</li>
       </ul>
     </td>
   </tr>
 </table>
+
