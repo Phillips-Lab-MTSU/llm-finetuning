@@ -243,7 +243,7 @@ Most of the results are statistically indistinguishable, but here they are:
 <table border='1'>
   <tr>
     <th>Pythia-160m</th>
-    <th>Pythia-160m Fine-tuned</th>
+    <th>Pythia-160m (finetuned)</th>
   </tr>
   <tr>
     <td>

@@ -15,7 +15,7 @@ Instructions are broken into a two categories:
   
 * [JupyterLab.md](JupyterLab.md)
   
-  This tutorial covers how to run a single-GPU interactive JupyterLab session in which you can use `lit-gpt` to download/convert model checkpoints, prepare common data sets, finetune using single- or multi-GPU training, and evaluate using some common benchmarks. Note that this approachs is inherently limited by the single-GPU bottleneck. Some small models like `Eleuther/pythia-160m` will train on a single 2080 Ti (12Gb) on bababage/hamilton, `Eleuther/pythia-1b` will train on a single A5000 (24Gb) on babbage, but larger models will need the A100 (80Gb) on hamilton.
+  This tutorial covers how to run a single-GPU interactive JupyterLab session in which you can use `lit-gpt` to download/convert model checkpoints, prepare common data sets, finetune using single-GPU training, and evaluate using some common benchmarks. Note that this approachs is inherently limited by the single-GPU bottleneck. Some small models like `Eleuther/pythia-160m` will finetune on a single 2080 Ti (12Gb) on bababage/hamilton, `Eleuther/pythia-1b` will finetune on a single A5000 (24Gb) on babbage, but larger models will need the A100 (80Gb) on hamilton.
 
 All repository components Copyright &copy; 2023 Phillips Lab @ MTSU
 
