@@ -131,7 +131,7 @@ A small data set (won't be very good, but can be good to quickly check the train
 salloc --gpus=1 llm-run.sh \
     python lit-gpt/scripts/prepare_dolly.py \
         --checkpoint_dir /home/shared/llm/checkpoints/EleutherAI/pythia-160m \
-        --destination_dir /home/shared/llm/data/EleutherAI/pythia-160m/dolly
+        --destination_path /home/shared/llm/data/EleutherAI/pythia-160m/dolly
 ```
 
 ## Finetune the LLM
